@@ -4,6 +4,7 @@ import (
 	"errors"
 	"net/http"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -73,6 +74,13 @@ func toggleTodoStatus(context *gin.Context) {
 }
 func main() {
 	router := gin.Default()
+
+	// CORS configuration
+	config := cors.DefaultConfig()
+	config.AllowOrigins = []string{"http://localhost:5173"} // Replace with your frontend's origin
+	config.AllowHeaders = []string{"Origin", "Content-Type"}
+	router.Use(cors.New(config))
+
 	router.GET("/todos", getTodos)
 	router.GET("/todos/:id", getTodo)
 	router.PATCH("/todos/:id", toggleTodoStatus)
